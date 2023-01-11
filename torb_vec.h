@@ -1,6 +1,6 @@
 #pragma once
 
-typedef double real ;
+typedef float real;
 
 struct ivec2 {
   ivec2() : x(0), y(0) {}

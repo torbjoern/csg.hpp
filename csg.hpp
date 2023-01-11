@@ -208,7 +208,6 @@ void splitPolygon(
 		// and the other polygons are added to the front and/or back subtrees.
 		// This is not a leafy BPS tree since there is no distinction
 		// between internal and leaf nodes.
-
 		Node()
 			: plane()
 			, front(nullptr)
@@ -366,7 +365,7 @@ void splitPolygon(
 		}
 
 		// Build a BSP tree out of 'polygons' polygons
-		void build(std::vector<Polygon> input)
+		void build(const std::vector<Polygon>& input)
 		{
 #if RECURSIVE == 1
 			if (input.empty()) return;
@@ -396,13 +395,15 @@ void splitPolygon(
 			std::deque< std::vector<Polygon> > polylists;
 			nodes.push_back(this);
 			polylists.push_back(input);
+
+			std::vector<Polygon> pfront, pback;
 			while (nodes.empty() == false)
 			{
 				Node* n = nodes.front();
 				const std::vector<Polygon>& list = polylists.front();
 				assert(!list.empty() && "list of polys empty");
 				if (!n->plane.ok()) n->plane = list[0].plane;
-				std::vector<Polygon> pfront, pback;
+				
 				for (const Polygon& p : list)
 				{
 					splitPolygon( n->plane, p, n->polygons, n->polygons, pfront, pback);
@@ -410,7 +411,7 @@ void splitPolygon(
 				if (pfront.empty() == false)
 				{
 					if (!n->front) {
-						n->front = std::unique_ptr<Node>(new Node);
+						n->front = std::make_unique<Node>();
 					}
 					nodes.push_back(n->front.get());
 					polylists.push_back(pfront);
@@ -418,13 +419,15 @@ void splitPolygon(
 				if (pback.empty() == false)
 				{
 					if (!n->back) {
-						n->back = std::unique_ptr<Node>(new Node);
+						n->back = std::make_unique<Node>();
 					}
 					nodes.push_back(n->back.get());
 					polylists.push_back(pback);
 				}
 				nodes.pop_front();
 				polylists.pop_front();
+				pfront.clear();
+				pback.clear();
 			}
 #endif
 			//printf("node %p complete\n",(void*)this);
@@ -635,7 +638,7 @@ void splitPolygon(
 		}
 	};
 
-	Model fromPolygons(std::vector<Polygon> polys)
+	Model fromPolygons(const std::vector<Polygon>& polys)
 	{
 		Model m;
 		for (const Polygon& poly : polys)

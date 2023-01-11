@@ -1,15 +1,28 @@
 # csg.hpp
- A port of the csg.js library to C++11
 
- original csg.js from evanw
- https://github.com/evanw/csg.js/
+What:
+====
+ A port of the csg.js constructive solid geometry library to C++11.
 
- arcball camera from nlguillemot
- https://github.com/nlguillemot/arcball_camera
+ Why?
+ ====
+ Because I wanted to better understand the original js code.
+ Noticed later that there is another, better C++ port at
+ https://github.com/executionunit/csgjs-cpp
 
- demo uses freeglut
+ How to build:
+ ==========
+ $ g++ -O2 -o demo demo.cpp -lm -lopengl32 -lfreeglut
+
+ References:
+ ===========
+ original javascript library [csg.js](https://github.com/evanw/csg.js/) from evanw
+ For the demo, 
+	[arcball camera](https://github.com/nlguillemot/arcball_camera) from nlguillemot
+	[freeglut](https://github.com/FreeGLUTProject)
 
  Example use:
+ ===========
 
 	#include "csg.cpp"
 
@@ -22,6 +35,6 @@
 
 	// Do something with polygons in C.
 
-For example render:
+Screenshot from demo:
 
-cube_sub_sphere.png
+![alt text](cube_sub_sphere.png "A cube minus a sphere")
